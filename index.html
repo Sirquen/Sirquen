@@ -1,534 +1,1341 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PS6 vs Projet Helix — Comparatif</title>
-  <style>
-    :root {
-      --ps-blue: #003087;
-      --ps-accent: #00439c;
-      --helix-purple: #6b21a8;
-      --helix-accent: #9333ea;
-      --dark: #0f0f0f;
-      --surface: #1a1a2e;
-      --card: #16213e;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --border: rgba(255,255,255,0.08);
-      --win: #22c55e;
-      --draw: #f59e0b;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PS6 vs Projet Helix — Infographique Interactif</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap');
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ps: #0070d1;
+    --ps-light: #5baaff;
+    --ps-glow: rgba(0,112,209,0.6);
+    --hx: #8b2be2;
+    --hx-light: #c77dff;
+    --hx-glow: rgba(139,43,226,0.6);
+    --bg: #050510;
+    --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
 
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--dark);
-      color: var(--text);
-      min-height: 100vh;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Hero ── */
-    .hero {
-      background: linear-gradient(135deg, #00174d 0%, #0f0f0f 40%, #2e0047 100%);
-      text-align: center;
-      padding: 60px 20px 40px;
-      border-bottom: 1px solid var(--border);
-    }
+  html { scroll-behavior: smooth; }
 
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(90deg, #5b9dff, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
 
-    .hero p {
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 560px;
-      margin-inline: auto;
-    }
+  /* ═══════════════════════════════════════
+     CANVAS PARTICLES
+  ═══════════════════════════════════════ */
+  #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
-    .badge {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 4px 14px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    z-index: 1;
+  }
 
-    /* ── Layout ── */
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 20px 60px;
-    }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba(0,112,209,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(139,43,226,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
-    /* ── Console cards ── */
-    .consoles {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
+  .hero-date {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease both;
+  }
 
-    @media (max-width: 600px) {
-      .consoles { grid-template-columns: 1fr; }
-    }
+  .versus-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
 
-    .console-card {
-      border-radius: 20px;
-      padding: 32px 28px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
+  .logo-box {
+    width: 90px; height: 90px;
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.6rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .logo-box:hover { transform: scale(1.1) rotate(-3deg); }
 
-    .console-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.12;
-      border-radius: inherit;
-    }
+  .logo-box.ps {
+    background: linear-gradient(135deg, rgba(0,80,180,0.4), rgba(0,112,209,0.2));
+    border: 1px solid rgba(0,112,209,0.5);
+    box-shadow: 0 0 40px rgba(0,112,209,0.4), inset 0 0 20px rgba(0,112,209,0.1);
+  }
 
-    .console-card.ps6 { background: linear-gradient(145deg, #001e5c, #0a0a1a); }
-    .console-card.ps6::before { background: radial-gradient(circle at top left, #003cbc, transparent 70%); }
+  .logo-box.hx {
+    background: linear-gradient(135deg, rgba(100,20,200,0.4), rgba(139,43,226,0.2));
+    border: 1px solid rgba(139,43,226,0.5);
+    box-shadow: 0 0 40px rgba(139,43,226,0.4), inset 0 0 20px rgba(139,43,226,0.1);
+  }
 
-    .console-card.helix { background: linear-gradient(145deg, #1c003c, #0a0a1a); }
-    .console-card.helix::before { background: radial-gradient(circle at top right, #7c3aed, transparent 70%); }
+  .vs-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    position: relative;
+  }
+  .vs-badge::before, .vs-badge::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .vs-badge::before { width: 60px; height: 60px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); }
 
-    .console-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 16px;
-    }
+  .hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
 
-    .ps6 .console-logo { background: rgba(0,80,200,0.25); }
-    .helix .console-logo { background: rgba(124,58,237,0.25); }
+  .hero h1 .ps-text {
+    background: linear-gradient(90deg, #5baaff, #0070d1);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero h1 .hx-text {
+    background: linear-gradient(90deg, #8b2be2, #c77dff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
 
-    .console-card h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.6;
+    animation: fadeUp 0.8s 0.3s ease both;
+    margin-bottom: 40px;
+  }
 
-    .ps6 h2 { color: #6fa8ff; }
-    .helix h2 { color: #c084fc; }
+  .scroll-hint {
+    animation: bounce 2s infinite, fadeUp 0.8s 0.5s ease both;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-hint svg { opacity: 0.5; }
 
-    .console-card .tagline {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
+  /* ═══════════════════════════════════════
+     MAIN CONTENT
+  ═══════════════════════════════════════ */
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
 
-    .spec-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  /* section header */
+  .sec-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .sec-label {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .sec-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #fff;
+  }
 
-    .spec-list li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.88rem;
-      padding: 8px 12px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-    }
+  /* ═══════════════════════════════════════
+     SPEC CARDS
+  ═══════════════════════════════════════ */
+  .spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 80px;
+  }
+  @media(max-width:700px){ .spec-grid{ grid-template-columns:1fr; } }
 
-    .spec-list li .label { color: var(--muted); }
-    .spec-list li .value { font-weight: 600; }
+  .spec-card {
+    border-radius: 24px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.4s cubic-bezier(.23,1.1,.53,.97), box-shadow 0.4s;
+  }
+  .spec-card:hover { transform: translateY(-8px) scale(1.01); }
 
-    /* ── Comparison table ── */
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 16px;
-    }
+  .spec-card.ps {
+    background: linear-gradient(145deg, rgba(0,60,150,0.35), rgba(5,5,20,0.8));
+    border: 1px solid rgba(0,112,209,0.3);
+    box-shadow: 0 4px 60px rgba(0,112,209,0.15);
+  }
+  .spec-card.ps:hover { box-shadow: 0 20px 80px rgba(0,112,209,0.35); }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      margin-bottom: 40px;
-    }
+  .spec-card.hx {
+    background: linear-gradient(145deg, rgba(80,20,160,0.35), rgba(5,5,20,0.8));
+    border: 1px solid rgba(139,43,226,0.3);
+    box-shadow: 0 4px 60px rgba(139,43,226,0.15);
+  }
+  .spec-card.hx:hover { box-shadow: 0 20px 80px rgba(139,43,226,0.35); }
 
-    thead tr {
-      background: var(--surface);
-    }
+  /* glow orb in card */
+  .spec-card::before {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    top: -60px; right: -60px;
+    pointer-events: none;
+    opacity: 0.15;
+  }
+  .spec-card.ps::before { background: radial-gradient(circle, #0070d1, transparent); }
+  .spec-card.hx::before { background: radial-gradient(circle, #8b2be2, transparent); }
 
-    thead th {
-      padding: 16px 20px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-align: left;
-    }
+  .card-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .ps .card-icon { background: rgba(0,112,209,0.2); box-shadow: 0 0 20px rgba(0,112,209,0.3); }
+  .hx .card-icon { background: rgba(139,43,226,0.2); box-shadow: 0 0 20px rgba(139,43,226,0.3); }
 
-    thead th:nth-child(2) { color: #6fa8ff; }
-    thead th:nth-child(3) { color: #c084fc; }
-    thead th:nth-child(4) { text-align: center; color: var(--muted); }
+  .card-title { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 900; }
+  .ps .card-title { color: var(--ps-light); }
+  .hx .card-title { color: var(--hx-light); }
+  .card-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
 
-    tbody tr {
-      border-top: 1px solid var(--border);
-      transition: background 0.15s;
-    }
+  .spec-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .spec-row:hover { background: rgba(255,255,255,0.06); }
+  .spec-row .k { font-size: 0.8rem; color: var(--muted); }
+  .spec-row .v { font-size: 0.85rem; font-weight: 600; }
+  .ps .spec-row .v { color: #93c5fd; }
+  .hx .spec-row .v { color: #d8b4fe; }
 
-    tbody tr:hover { background: rgba(255,255,255,0.03); }
+  /* ═══════════════════════════════════════
+     ANIMATED BAR CHART
+  ═══════════════════════════════════════ */
+  .bars-section { margin-bottom: 80px; }
 
-    tbody td {
-      padding: 14px 20px;
-      font-size: 0.9rem;
-    }
+  .bar-chart { display: flex; flex-direction: column; gap: 20px; }
 
-    tbody td:first-child { color: var(--muted); font-weight: 500; }
-    tbody td:nth-child(2) { color: #93bbff; }
-    tbody td:nth-child(3) { color: #d8b4fe; }
+  .bar-row { display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: center; }
+  @media(max-width:600px){ .bar-row{ grid-template-columns: 100px 1fr; gap:8px; } }
 
-    .verdict {
-      text-align: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 99px;
-      display: inline-block;
-    }
+  .bar-label { font-size: 0.82rem; color: var(--muted); text-align: right; }
 
-    .verdict.ps { background: rgba(0,100,230,0.2); color: #6fa8ff; border: 1px solid rgba(0,100,230,0.3); }
-    .verdict.helix { background: rgba(124,58,237,0.2); color: #c084fc; border: 1px solid rgba(124,58,237,0.3); }
-    .verdict.draw { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .bar-tracks {
+    display: flex; flex-direction: column; gap: 5px;
+  }
 
-    td.center { text-align: center; }
+  .bar-track {
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    overflow: visible;
+    position: relative;
+  }
 
-    /* ── Score bar ── */
-    .score-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(.23,1.1,.53,.97);
+    position: relative;
+    display: flex; align-items: center; padding-left: 10px;
+    overflow: visible;
+  }
 
-    @media (max-width: 600px) { .score-section { grid-template-columns: 1fr; } }
+  .bar-fill.ps-bar {
+    background: linear-gradient(90deg, #003c8f, #5baaff);
+    box-shadow: 0 0 20px rgba(0,112,209,0.5);
+  }
+  .bar-fill.hx-bar {
+    background: linear-gradient(90deg, #4a0080, #c77dff);
+    box-shadow: 0 0 20px rgba(139,43,226,0.5);
+  }
 
-    .score-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-    }
+  .bar-val {
+    position: absolute;
+    right: -52px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    top: 50%; transform: translateY(-50%);
+  }
+  .ps-bar .bar-val { color: var(--ps-light); }
+  .hx-bar .bar-val { color: var(--hx-light); }
 
-    .score-card .name {
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
+  .bar-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ps-bar .bar-dot { background: #fff; box-shadow: 0 0 6px #5baaff; }
+  .hx-bar .bar-dot { background: #fff; box-shadow: 0 0 6px #c77dff; }
 
-    .score-card.ps .name { color: #6fa8ff; }
-    .score-card.helix .name { color: #c084fc; }
+  /* ═══════════════════════════════════════
+     RADAR CHART
+  ═══════════════════════════════════════ */
+  .radar-section { margin-bottom: 80px; }
+  .radar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  #radarCanvas { max-width: 520px; width: 100%; }
 
-    .score-card .number {
-      font-size: 3.5rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
+  .radar-legend {
+    display: flex; gap: 32px;
+  }
+  .radar-legend .item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .ps-dot { background: #5baaff; box-shadow: 0 0 8px #5baaff; }
+  .hx-dot { background: #c77dff; box-shadow: 0 0 8px #c77dff; }
 
-    .score-card.ps .number { color: #6fa8ff; }
-    .score-card.helix .number { color: #c084fc; }
+  /* ═══════════════════════════════════════
+     CRITERIA CARDS (interactive)
+  ═══════════════════════════════════════ */
+  .criteria-section { margin-bottom: 80px; }
 
-    .score-card .sub { font-size: 0.8rem; color: var(--muted); }
+  .criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
 
-    .bar-wrap { margin-top: 14px; height: 6px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
-    .bar { height: 100%; border-radius: 99px; transition: width 1s ease; }
-    .score-card.ps .bar { background: linear-gradient(90deg, #003cbc, #5b9dff); }
-    .score-card.helix .bar { background: linear-gradient(90deg, #6b21a8, #c084fc); }
+  .crit-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .crit-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255,255,255,0.07);
+  }
+  .crit-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 0 0 16px 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .crit-card:hover::after { opacity: 1; }
+  .crit-card.win-ps::after { background: linear-gradient(90deg, var(--ps), var(--ps-light)); }
+  .crit-card.win-hx::after { background: linear-gradient(90deg, var(--hx), var(--hx-light)); }
+  .crit-card.win-draw::after { background: linear-gradient(90deg, #f59e0b, #fde68a); }
 
-    /* ── Pros & Cons ── */
-    .pros-cons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
+  .crit-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .crit-name { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .crit-badge {
+    font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .crit-badge.ps  { background: rgba(0,112,209,0.2); color: var(--ps-light); border: 1px solid rgba(0,112,209,0.3); }
+  .crit-badge.hx  { background: rgba(139,43,226,0.2); color: var(--hx-light); border: 1px solid rgba(139,43,226,0.3); }
+  .crit-badge.draw{ background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
 
-    @media (max-width: 600px) { .pros-cons { grid-template-columns: 1fr; } }
+  .crit-compare {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .crit-item {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.82rem; padding: 6px 10px;
+    border-radius: 8px; background: rgba(255,255,255,0.03);
+  }
+  .crit-item .ci-label { font-size: 0.7rem; font-weight: 700; }
+  .crit-item.ps-item .ci-label { color: var(--ps-light); }
+  .crit-item.hx-item .ci-label { color: var(--hx-light); }
+  .crit-item .ci-val { font-weight: 600; }
 
-    .pc-card {
-      border-radius: 16px;
-      padding: 24px;
-      border: 1px solid var(--border);
-      background: var(--card);
-    }
+  /* ═══════════════════════════════════════
+     SCORE DUEL
+  ═══════════════════════════════════════ */
+  .duel-section { margin-bottom: 80px; }
 
-    .pc-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  .duel-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .duel-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 60% at 25% 50%, rgba(0,112,209,0.08), transparent),
+                radial-gradient(ellipse 50% 60% at 75% 50%, rgba(139,43,226,0.08), transparent);
+    pointer-events: none;
+  }
 
-    .pc-card.ps h3 { color: #6fa8ff; }
-    .pc-card.helix h3 { color: #c084fc; }
+  .duel-scores {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 20px;
+    margin-bottom: 32px;
+  }
 
-    .pc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .duel-side { text-align: center; }
+  .duel-icon { font-size: 3rem; margin-bottom: 8px; display: block; }
+  .duel-name {
+    font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  .duel-side.ps .duel-name { color: var(--ps-light); }
+  .duel-side.hx .duel-name { color: var(--hx-light); }
 
-    .pc-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
+  .duel-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    transition: all 0.3s;
+  }
+  .duel-side.ps .duel-num {
+    color: var(--ps-light);
+    text-shadow: 0 0 60px var(--ps-glow);
+  }
+  .duel-side.hx .duel-num {
+    color: var(--hx-light);
+    text-shadow: 0 0 60px var(--hx-glow);
+  }
 
-    .pc-list li .icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+  .duel-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
 
-    /* ── Footer ── */
-    footer {
-      text-align: center;
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
+  .duel-divider {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .duel-vs-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem; font-weight: 900;
+    color: rgba(255,255,255,0.2);
+  }
+  .duel-line {
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+  }
 
-    footer span { color: #6fa8ff; }
-  </style>
+  .duel-bar-wrap {
+    height: 8px;
+    border-radius: 99px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+  }
+  .duel-bar-ps {
+    height: 100%;
+    background: linear-gradient(90deg, #003c8f, #5baaff);
+    box-shadow: 4px 0 12px rgba(0,112,209,0.6);
+    transition: width 1.5s cubic-bezier(.23,1.1,.53,.97);
+  }
+  .duel-bar-hx {
+    height: 100%;
+    background: linear-gradient(90deg, #c77dff, #4a0080);
+    box-shadow: -4px 0 12px rgba(139,43,226,0.6);
+    transition: width 1.5s cubic-bezier(.23,1.1,.53,.97);
+  }
+
+  .duel-winner-banner {
+    margin-top: 24px;
+    text-align: center;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(139,43,226,0.12);
+    border: 1px solid rgba(139,43,226,0.3);
+    font-size: 0.85rem;
+    color: var(--hx-light);
+    font-weight: 600;
+  }
+  .duel-winner-banner span { color: #fff; }
+
+  /* ═══════════════════════════════════════
+     PROS / CONS TABS
+  ═══════════════════════════════════════ */
+  .proscons-section { margin-bottom: 80px; }
+
+  .tabs {
+    display: flex; gap: 8px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  .tab-btn {
+    padding: 10px 24px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Inter', sans-serif;
+  }
+  .tab-btn:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+  .tab-btn.active-ps {
+    background: rgba(0,112,209,0.2);
+    border-color: rgba(0,112,209,0.5);
+    color: var(--ps-light);
+    box-shadow: 0 0 20px rgba(0,112,209,0.2);
+  }
+  .tab-btn.active-hx {
+    background: rgba(139,43,226,0.2);
+    border-color: rgba(139,43,226,0.5);
+    color: var(--hx-light);
+    box-shadow: 0 0 20px rgba(139,43,226,0.2);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
+
+  .pc-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  @media(max-width:600px){ .pc-grid{ grid-template-columns:1fr; } }
+
+  .pc-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .pc-box h4 {
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pc-box.pros h4 { color: #4ade80; }
+  .pc-box.cons h4 { color: #f87171; }
+
+  .pc-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem; line-height: 1.5;
+    animation: fadeSlide 0.4s ease both;
+  }
+  .pc-item:last-child { border-bottom: none; }
+  .pc-item .pci { flex-shrink: 0; font-size: 1.1rem; }
+
+  /* ═══════════════════════════════════════
+     COUNTER SECTION
+  ═══════════════════════════════════════ */
+  .counters {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px; margin-bottom: 80px;
+  }
+
+  .counter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 16px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .counter-card:hover { transform: translateY(-4px); }
+  .counter-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+  .counter-card:hover::before { opacity: 1; }
+  .counter-card.ps::before { background: radial-gradient(circle at center, rgba(0,112,209,0.08), transparent 70%); }
+  .counter-card.hx::before { background: radial-gradient(circle at center, rgba(139,43,226,0.08), transparent 70%); }
+
+  .counter-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .counter-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem; font-weight: 900; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .counter-card.ps .counter-num { color: var(--ps-light); }
+  .counter-card.hx .counter-num { color: var(--hx-light); }
+  .counter-card.neutral .counter-num { color: #e2e8f0; }
+  .counter-unit { font-size: 0.75rem; color: var(--muted); }
+
+  /* ═══════════════════════════════════════
+     VERDICT FINAL
+  ═══════════════════════════════════════ */
+  .verdict-section { margin-bottom: 40px; }
+
+  .verdict-card {
+    border-radius: 24px;
+    padding: 48px 40px;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(80,20,160,0.3), rgba(5,5,20,0.8));
+    border: 1px solid rgba(139,43,226,0.3);
+    box-shadow: 0 0 80px rgba(139,43,226,0.2);
+    position: relative; overflow: hidden;
+  }
+  .verdict-card::before {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(139,43,226,0.15), transparent);
+    pointer-events: none;
+  }
+
+  .verdict-trophy { font-size: 4rem; display: block; margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
+  .verdict-card h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 900;
+    color: var(--hx-light);
+    margin-bottom: 12px;
+  }
+  .verdict-card p {
+    font-size: 0.95rem; color: var(--muted);
+    max-width: 560px; margin: 0 auto; line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--muted);
+    position: relative; z-index: 1;
+  }
+
+  /* ═══════════════════════════════════════
+     ANIMATIONS
+  ═══════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(8px); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-10px) rotate(5deg); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0,112,209,0.3); }
+    50%       { box-shadow: 0 0 50px rgba(0,112,209,0.7); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Tooltip */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%);
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    color: #e2e8f0;
+    pointer-events: none;
+    z-index: 100;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Hero -->
-  <div class="hero">
-    <h1>PS6 vs Projet Helix</h1>
-    <p>Comparatif technique et commercial entre la PlayStation 6 de Sony et le Projet Helix de Microsoft.</p>
-    <div class="badge">Spécifications 2025–2026 · Données préliminaires</div>
+<canvas id="particles"></canvas>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-date">Mars 2026 · Données préliminaires</div>
+
+  <div class="versus-wrap">
+    <div class="logo-box ps" data-tip="PlayStation 6 — Sony">🎮</div>
+    <div class="vs-badge">VS</div>
+    <div class="logo-box hx" data-tip="Projet Helix — Microsoft Xbox">⚡</div>
   </div>
 
-  <main>
+  <h1>
+    <span class="ps-text">PS6</span>
+    <br>vs<br>
+    <span class="hx-text">Projet Helix</span>
+  </h1>
 
-    <!-- Console overview cards -->
-    <div class="consoles">
-      <div class="console-card ps6">
-        <div class="console-logo">🎮</div>
-        <h2>PlayStation 6</h2>
-        <p class="tagline">Sony Interactive Entertainment · Sortie prévue 2026</p>
-        <ul class="spec-list">
-          <li><span class="label">CPU</span><span class="value">AMD Zen 5 — 8 cœurs / 16 threads</span></li>
-          <li><span class="label">GPU</span><span class="value">AMD RDNA 4 — ~24 TFLOPS</span></li>
-          <li><span class="label">RAM</span><span class="value">24 Go GDDR7</span></li>
-          <li><span class="label">Stockage</span><span class="value">SSD NVMe 2 To — ~22 Go/s</span></li>
-          <li><span class="label">Ray Tracing</span><span class="value">Hardware (gen 2)</span></li>
-          <li><span class="label">Résolution max</span><span class="value">8K / 120 fps</span></li>
-          <li><span class="label">Prix estimé</span><span class="value">599 €</span></li>
-          <li><span class="label">Rétrocompatibilité</span><span class="value">PS4 / PS5</span></li>
-        </ul>
+  <p class="hero-sub">Infographique interactif — Comparatif technique et commercial entre les deux prochaines consoles next-gen.</p>
+
+  <div class="scroll-hint">
+    <span>Défiler</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<div class="content">
+
+  <!-- KEY NUMBERS -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Chiffres clés</div>
+    <div class="sec-title">Les specs en un coup d'œil</div>
+  </div>
+  <div class="counters reveal">
+    <div class="counter-card ps" data-tip="Téraflops GPU · PS6">
+      <span class="counter-icon">🖥️</span>
+      <div class="counter-num" data-target="24" data-suffix=" TF">0</div>
+      <div class="counter-unit">PS6 · GPU</div>
+    </div>
+    <div class="counter-card hx" data-tip="Téraflops GPU · Helix">
+      <span class="counter-icon">🖥️</span>
+      <div class="counter-num" data-target="28" data-suffix=" TF">0</div>
+      <div class="counter-unit">Helix · GPU</div>
+    </div>
+    <div class="counter-card ps" data-tip="Vitesse SSD · PS6">
+      <span class="counter-icon">💾</span>
+      <div class="counter-num" data-target="22" data-suffix=" Go/s">0</div>
+      <div class="counter-unit">PS6 · SSD</div>
+    </div>
+    <div class="counter-card hx" data-tip="Vitesse SSD · Helix">
+      <span class="counter-icon">💾</span>
+      <div class="counter-num" data-target="20" data-suffix=" Go/s">0</div>
+      <div class="counter-unit">Helix · SSD</div>
+    </div>
+    <div class="counter-card ps" data-tip="Prix de lancement PS6">
+      <span class="counter-icon">💶</span>
+      <div class="counter-num" data-target="599" data-suffix="€">0</div>
+      <div class="counter-unit">PS6 · Prix</div>
+    </div>
+    <div class="counter-card hx" data-tip="Prix de lancement Helix">
+      <span class="counter-icon">💶</span>
+      <div class="counter-num" data-target="549" data-suffix="€">0</div>
+      <div class="counter-unit">Helix · Prix</div>
+    </div>
+    <div class="counter-card neutral" data-tip="RAM partagée">
+      <span class="counter-icon">🧠</span>
+      <div class="counter-num" data-target="24" data-suffix=" Go">0</div>
+      <div class="counter-unit">RAM · Les deux</div>
+    </div>
+    <div class="counter-card neutral" data-tip="Stockage interne">
+      <span class="counter-icon">📦</span>
+      <div class="counter-num" data-target="2" data-suffix=" To">0</div>
+      <div class="counter-unit">Stockage · Les deux</div>
+    </div>
+  </div>
+
+  <!-- SPEC CARDS -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Fiches techniques</div>
+    <div class="sec-title">Spécifications complètes</div>
+  </div>
+  <div class="spec-grid reveal">
+    <div class="spec-card ps">
+      <div class="card-header">
+        <div class="card-icon">🎮</div>
+        <div>
+          <div class="card-title">PlayStation 6</div>
+          <div class="card-sub">Sony Interactive Entertainment · 2026</div>
+        </div>
       </div>
+      <div class="spec-row"><span class="k">CPU</span><span class="v">AMD Zen 5 · 8c/16t · ~4.5 GHz</span></div>
+      <div class="spec-row"><span class="k">GPU</span><span class="v">AMD RDNA 4 · ~24 TFLOPS</span></div>
+      <div class="spec-row"><span class="k">RAM</span><span class="v">24 Go GDDR7 · ~900 Go/s</span></div>
+      <div class="spec-row"><span class="k">SSD</span><span class="v">2 To NVMe · ~22 Go/s</span></div>
+      <div class="spec-row"><span class="k">Ray Tracing</span><span class="v">Hardware Gen 2</span></div>
+      <div class="spec-row"><span class="k">IA / Upscaling</span><span class="v">Tempest Engine 2 + PSSR</span></div>
+      <div class="spec-row"><span class="k">Résolution</span><span class="v">Jusqu'à 8K / 120 fps</span></div>
+      <div class="spec-row"><span class="k">VR</span><span class="v">PS VR3 compatible</span></div>
+      <div class="spec-row"><span class="k">Manette</span><span class="v">DualSense 2 (haptiques avancés)</span></div>
+      <div class="spec-row"><span class="k">Rétrocompat.</span><span class="v">PS4 + PS5</span></div>
+      <div class="spec-row"><span class="k">Conso. max</span><span class="v">~200 W</span></div>
+      <div class="spec-row"><span class="k">Prix</span><span class="v">~599 €</span></div>
+    </div>
 
-      <div class="console-card helix">
-        <div class="console-logo">⚡</div>
-        <h2>Projet Helix</h2>
-        <p class="tagline">Microsoft Xbox · Sortie prévue 2026</p>
-        <ul class="spec-list">
-          <li><span class="label">CPU</span><span class="value">AMD Zen 5 — 8 cœurs / 16 threads</span></li>
-          <li><span class="label">GPU</span><span class="value">AMD RDNA 4 — ~28 TFLOPS</span></li>
-          <li><span class="label">RAM</span><span class="value">24 Go GDDR7</span></li>
-          <li><span class="label">Stockage</span><span class="value">SSD NVMe 2 To — ~20 Go/s</span></li>
-          <li><span class="label">Ray Tracing</span><span class="value">Hardware (gen 2)</span></li>
-          <li><span class="label">Résolution max</span><span class="value">8K / 120 fps</span></li>
-          <li><span class="label">Prix estimé</span><span class="value">549 €</span></li>
-          <li><span class="label">Rétrocompatibilité</span><span class="value">Xbox One / Series / PC</span></li>
-        </ul>
+    <div class="spec-card hx">
+      <div class="card-header">
+        <div class="card-icon">⚡</div>
+        <div>
+          <div class="card-title">Projet Helix</div>
+          <div class="card-sub">Microsoft Xbox · 2026</div>
+        </div>
+      </div>
+      <div class="spec-row"><span class="k">CPU</span><span class="v">AMD Zen 5 · 8c/16t · ~4.5 GHz</span></div>
+      <div class="spec-row"><span class="k">GPU</span><span class="v">AMD RDNA 4 · ~28 TFLOPS</span></div>
+      <div class="spec-row"><span class="k">RAM</span><span class="v">24 Go GDDR7 · ~900 Go/s</span></div>
+      <div class="spec-row"><span class="k">SSD</span><span class="v">2 To NVMe · ~20 Go/s</span></div>
+      <div class="spec-row"><span class="k">Ray Tracing</span><span class="v">Hardware Gen 2</span></div>
+      <div class="spec-row"><span class="k">IA / Upscaling</span><span class="v">DirectML + Xbox AI Copilot</span></div>
+      <div class="spec-row"><span class="k">Résolution</span><span class="v">Jusqu'à 8K / 120 fps</span></div>
+      <div class="spec-row"><span class="k">VR</span><span class="v">Non confirmé</span></div>
+      <div class="spec-row"><span class="k">Manette</span><span class="v">Xbox Elite v3</span></div>
+      <div class="spec-row"><span class="k">Rétrocompat.</span><span class="v">Xbox One + Series + PC</span></div>
+      <div class="spec-row"><span class="k">Conso. max</span><span class="v">~220 W</span></div>
+      <div class="spec-row"><span class="k">Prix</span><span class="v">~549 €</span></div>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Performances comparées</div>
+    <div class="sec-title">Graphique en barres</div>
+  </div>
+  <div class="bars-section reveal">
+    <div class="bar-chart" id="barChart"></div>
+  </div>
+
+  <!-- RADAR -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Analyse multidimensionnelle</div>
+    <div class="sec-title">Radar des performances</div>
+  </div>
+  <div class="radar-section reveal">
+    <div class="radar-wrap">
+      <canvas id="radarCanvas" width="520" height="520"></canvas>
+      <div class="radar-legend">
+        <div class="item"><div class="legend-dot ps-dot"></div><span>PlayStation 6</span></div>
+        <div class="item"><div class="legend-dot hx-dot"></div><span>Projet Helix</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRITERIA -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Analyse critère par critère</div>
+    <div class="sec-title">Qui gagne sur chaque point ?</div>
+  </div>
+  <div class="criteria-section reveal">
+    <div class="criteria-grid" id="criteriaGrid"></div>
+  </div>
+
+  <!-- DUEL SCORE -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Score final</div>
+    <div class="sec-title">Le verdict du duel</div>
+  </div>
+  <div class="duel-section reveal">
+    <div class="duel-wrap">
+      <div class="duel-scores">
+        <div class="duel-side ps">
+          <span class="duel-icon">🎮</span>
+          <div class="duel-name">PlayStation 6</div>
+          <div class="duel-num" id="psScore">0</div>
+          <div class="duel-sub">victoires</div>
+        </div>
+        <div class="duel-divider">
+          <div class="duel-line"></div>
+          <div class="duel-vs-text">VS</div>
+          <div class="duel-line"></div>
+        </div>
+        <div class="duel-side hx">
+          <span class="duel-icon">⚡</span>
+          <div class="duel-name">Projet Helix</div>
+          <div class="duel-num" id="hxScore">0</div>
+          <div class="duel-sub">victoires</div>
+        </div>
+      </div>
+      <div class="duel-bar-wrap">
+        <div class="duel-bar-ps" id="duelBarPs" style="width:0%"></div>
+        <div class="duel-bar-hx" id="duelBarHx" style="width:0%"></div>
+      </div>
+      <div class="duel-winner-banner">
+        🏆 <span>Projet Helix</span> remporte le comparatif avec 6 critères gagnés sur 13, grâce à son GPU plus puissant, son prix compétitif et son écosystème Game Pass.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROS CONS -->
+  <div class="sec-head reveal">
+    <div class="sec-label">Points forts & faibles</div>
+    <div class="sec-title">Pour &amp; Contre</div>
+  </div>
+  <div class="proscons-section reveal">
+    <div class="tabs">
+      <button class="tab-btn active-ps" onclick="setTab('ps')">🎮 PlayStation 6</button>
+      <button class="tab-btn" onclick="setTab('hx')">⚡ Projet Helix</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-ps">
+      <div class="pc-grid">
+        <div class="pc-box pros">
+          <h4>✅ Points forts</h4>
+          <div class="pc-item" style="animation-delay:0.05s"><span class="pci">🎯</span> Exclusivités AAA incontournables (God of War, Spider-Man…)</div>
+          <div class="pc-item" style="animation-delay:0.1s"><span class="pci">🕹️</span> DualSense 2 : retours haptiques et gâchettes adaptatives de pointe</div>
+          <div class="pc-item" style="animation-delay:0.15s"><span class="pci">⚡</span> SSD le plus rapide du marché console (~22 Go/s)</div>
+          <div class="pc-item" style="animation-delay:0.2s"><span class="pci">👓</span> Support VR natif avec PlayStation VR3</div>
+          <div class="pc-item" style="animation-delay:0.25s"><span class="pci">🌿</span> Consommation électrique plus faible (~200 W)</div>
+          <div class="pc-item" style="animation-delay:0.3s"><span class="pci">🌍</span> Base installée massive de joueurs fidèles</div>
+        </div>
+        <div class="pc-box cons">
+          <h4>❌ Points faibles</h4>
+          <div class="pc-item" style="animation-delay:0.05s"><span class="pci">💸</span> Prix de lancement plus élevé (~599 €)</div>
+          <div class="pc-item" style="animation-delay:0.1s"><span class="pci">🖥️</span> GPU légèrement moins puissant (~24 vs 28 TFLOPS)</div>
+          <div class="pc-item" style="animation-delay:0.15s"><span class="pci">📚</span> Catalogue abonnement PS Plus moins fourni que Game Pass</div>
+          <div class="pc-item" style="animation-delay:0.2s"><span class="pci">💻</span> Écosystème PC/mobile limité (Remote Play uniquement)</div>
+          <div class="pc-item" style="animation-delay:0.25s"><span class="pci">🔄</span> Rétrocompatibilité restreinte aux consoles Sony</div>
+        </div>
       </div>
     </div>
 
-    <!-- Detailed comparison table -->
-    <p class="section-title">Comparatif détaillé</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Critère</th>
-          <th>🎮 PS6</th>
-          <th>⚡ Projet Helix</th>
-          <th>Avantage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Puissance GPU</td>
-          <td>~24 TFLOPS</td>
-          <td>~28 TFLOPS</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>Vitesse SSD</td>
-          <td>~22 Go/s</td>
-          <td>~20 Go/s</td>
-          <td class="center"><span class="verdict ps">PS6</span></td>
-        </tr>
-        <tr>
-          <td>Prix de lancement</td>
-          <td>~599 €</td>
-          <td>~549 €</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>Exclusivités jeux</td>
-          <td>God of War, Spider-Man…</td>
-          <td>Halo, Fable, Starfield…</td>
-          <td class="center"><span class="verdict draw">Égalité</span></td>
-        </tr>
-        <tr>
-          <td>Service en ligne</td>
-          <td>PlayStation Plus</td>
-          <td>Xbox Game Pass Ultimate</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>Catalogue abonnement</td>
-          <td>Centaines de jeux</td>
-          <td>+500 jeux day one</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>Écosystème mobile / PC</td>
-          <td>Remote Play</td>
-          <td>Xbox / Windows natif</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>Haptics / manette</td>
-          <td>DualSense 2 (retours tactiles évolués)</td>
-          <td>Xbox Elite v3</td>
-          <td class="center"><span class="verdict ps">PS6</span></td>
-        </tr>
-        <tr>
-          <td>Interface utilisateur</td>
-          <td>PlayStation OS 2.0</td>
-          <td>Xbox Dashboard NG</td>
-          <td class="center"><span class="verdict draw">Égalité</span></td>
-        </tr>
-        <tr>
-          <td>Rétrocompatibilité</td>
-          <td>PS4, PS5</td>
-          <td>Xbox One, Series, PC</td>
-          <td class="center"><span class="verdict helix">Helix</span></td>
-        </tr>
-        <tr>
-          <td>VR natif</td>
-          <td>PS VR3 compatible</td>
-          <td>Non confirmé</td>
-          <td class="center"><span class="verdict ps">PS6</span></td>
-        </tr>
-        <tr>
-          <td>Consommation énergétique</td>
-          <td>~200 W (estimé)</td>
-          <td>~220 W (estimé)</td>
-          <td class="center"><span class="verdict ps">PS6</span></td>
-        </tr>
-        <tr>
-          <td>IA embarquée</td>
-          <td>Tempest Engine 2 + IA upscaling</td>
-          <td>DirectML + IA Copilot</td>
-          <td class="center"><span class="verdict draw">Égalité</span></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Score -->
-    <p class="section-title">Score global</p>
-    <div class="score-section">
-      <div class="score-card ps">
-        <div class="name">PlayStation 6</div>
-        <div class="number">4</div>
-        <div class="sub">avantages remportés</div>
-        <div class="bar-wrap"><div class="bar" style="width: 44%"></div></div>
-      </div>
-      <div class="score-card helix">
-        <div class="name">Projet Helix</div>
-        <div class="number">6</div>
-        <div class="sub">avantages remportés</div>
-        <div class="bar-wrap"><div class="bar" style="width: 67%"></div></div>
+    <div class="tab-panel" id="tab-hx">
+      <div class="pc-grid">
+        <div class="pc-box pros">
+          <h4>✅ Points forts</h4>
+          <div class="pc-item" style="animation-delay:0.05s"><span class="pci">🖥️</span> GPU le plus puissant des deux consoles (~28 TFLOPS)</div>
+          <div class="pc-item" style="animation-delay:0.1s"><span class="pci">🎁</span> Xbox Game Pass Ultimate : +500 jeux inclus dès le lancement</div>
+          <div class="pc-item" style="animation-delay:0.15s"><span class="pci">💶</span> Prix plus accessible (~549 €)</div>
+          <div class="pc-item" style="animation-delay:0.2s"><span class="pci">🔄</span> Rétrocompatibilité étendue : Xbox One, Series et PC Windows</div>
+          <div class="pc-item" style="animation-delay:0.25s"><span class="pci">☁️</span> Xbox Cloud Gaming intégré nativement</div>
+          <div class="pc-item" style="animation-delay:0.3s"><span class="pci">🤖</span> IA Copilot Xbox embarquée pour l'assistance en jeu</div>
+        </div>
+        <div class="pc-box cons">
+          <h4>❌ Points faibles</h4>
+          <div class="pc-item" style="animation-delay:0.05s"><span class="pci">👓</span> Pas de VR natif annoncé</div>
+          <div class="pc-item" style="animation-delay:0.1s"><span class="pci">💾</span> SSD légèrement moins rapide (~20 Go/s)</div>
+          <div class="pc-item" style="animation-delay:0.15s"><span class="pci">🕹️</span> Manette sans retour haptique avancé comparable au DualSense</div>
+          <div class="pc-item" style="animation-delay:0.2s"><span class="pci">🌿</span> Consommation électrique plus élevée (~220 W)</div>
+          <div class="pc-item" style="animation-delay:0.25s"><span class="pci">🎯</span> Exclusivités moins attendues par le grand public</div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Pros & Cons -->
-    <p class="section-title">Points forts &amp; faibles</p>
-    <div class="pros-cons">
-      <!-- PS6 pros -->
-      <div class="pc-card ps">
-        <h3>🎮 PS6 — Pour</h3>
-        <ul class="pc-list">
-          <li><span class="icon">✅</span> Exclusivités AAA très attendues (God of War, Spider-Man)</li>
-          <li><span class="icon">✅</span> DualSense 2 : expérience haptique inégalée</li>
-          <li><span class="icon">✅</span> SSD le plus rapide du marché console</li>
-          <li><span class="icon">✅</span> Support VR natif avec PS VR3</li>
-          <li><span class="icon">✅</span> Consommation électrique plus faible</li>
-        </ul>
-      </div>
-      <!-- PS6 cons -->
-      <div class="pc-card ps">
-        <h3>🎮 PS6 — Contre</h3>
-        <ul class="pc-list">
-          <li><span class="icon">❌</span> Prix de lancement plus élevé (~599 €)</li>
-          <li><span class="icon">❌</span> GPU légèrement moins puissant</li>
-          <li><span class="icon">❌</span> Catalogue abonnement moins fourni</li>
-          <li><span class="icon">❌</span> Rétrocompatibilité limitée aux consoles Sony</li>
-        </ul>
-      </div>
-      <!-- Helix pros -->
-      <div class="pc-card helix">
-        <h3>⚡ Projet Helix — Pour</h3>
-        <ul class="pc-list">
-          <li><span class="icon">✅</span> GPU plus puissant (~28 TFLOPS)</li>
-          <li><span class="icon">✅</span> Game Pass : +500 jeux inclus dès le lancement</li>
-          <li><span class="icon">✅</span> Prix plus accessible (~549 €)</li>
-          <li><span class="icon">✅</span> Rétrocompatibilité étendue (Xbox + PC)</li>
-          <li><span class="icon">✅</span> Intégration Windows / Xbox Cloud Gaming</li>
-        </ul>
-      </div>
-      <!-- Helix cons -->
-      <div class="pc-card helix">
-        <h3>⚡ Projet Helix — Contre</h3>
-        <ul class="pc-list">
-          <li><span class="icon">❌</span> Pas de VR natif annoncé</li>
-          <li><span class="icon">❌</span> SSD légèrement moins rapide</li>
-          <li><span class="icon">❌</span> Manette sans retour haptique avancé</li>
-          <li><span class="icon">❌</span> Consommation énergétique plus élevée</li>
-        </ul>
-      </div>
+  <!-- VERDICT FINAL -->
+  <div class="verdict-section reveal">
+    <div class="verdict-card">
+      <span class="verdict-trophy">🏆</span>
+      <h2>Verdict : Projet Helix en tête — mais PS6 résiste</h2>
+      <p>Sur le papier, le <strong style="color:var(--hx-light)">Projet Helix</strong> domine grâce à un GPU plus puissant, un prix plus bas et un écosystème Game Pass imbattable. Mais la <strong style="color:var(--ps-light)">PlayStation 6</strong> tire son épingle du jeu avec un SSD ultra-rapide, le DualSense 2 et le support VR. Le choix final dépendra surtout des exclusivités et de l'écosystème auquel vous êtes attaché.</p>
     </div>
+  </div>
 
-  </main>
+</div>
 
-  <footer>
-    Données basées sur les rumeurs et fuites disponibles en mars 2026 · Comparatif non officiel ·
-    <span>PS6</span> et <span>Projet Helix</span> sont des marques déposées de leurs propriétaires respectifs.
-  </footer>
+<footer>
+  Données basées sur les rumeurs et fuites disponibles en mars 2026 · Infographique non officiel ·
+  PS6 et Projet Helix sont des marques de leurs propriétaires respectifs.
+</footer>
 
+<script>
+/* ════════════════════════════════════
+   PARTICLES
+════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const PS = '#0070d1', HX = '#8b2be2';
+
+  class Particle {
+    constructor(){
+      this.reset();
+    }
+    reset(){
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.r = Math.random() * 1.5 + 0.3;
+      this.alpha = Math.random() * 0.5 + 0.1;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.color = Math.random() > 0.5 ? PS : HX;
+    }
+    update(){
+      this.x += this.vx; this.y += this.vy;
+      if(this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  for(let i = 0; i < 120; i++) particles.push(new Particle());
+
+  function loop(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ════════════════════════════════════
+   BAR CHART DATA
+════════════════════════════════════ */
+const barData = [
+  { label: 'GPU (TFLOPS)',    ps: 24,  hx: 28,  max: 35,  psLabel: '24 TF',   hxLabel: '28 TF' },
+  { label: 'SSD (Go/s)',      ps: 22,  hx: 20,  max: 30,  psLabel: '22 Go/s', hxLabel: '20 Go/s' },
+  { label: 'RAM bande passante (Go/s)', ps: 900, hx: 900, max: 1100, psLabel: '900', hxLabel: '900' },
+  { label: 'Stockage (To)',   ps: 2,   hx: 2,   max: 4,   psLabel: '2 To',    hxLabel: '2 To' },
+  { label: 'Conso. max (W)',  ps: 200, hx: 220, max: 300, psLabel: '200 W',  hxLabel: '220 W' },
+];
+
+function buildBars(){
+  const container = document.getElementById('barChart');
+  barData.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label">${d.label}</div>
+      <div class="bar-tracks">
+        <div class="bar-track">
+          <div class="bar-fill ps-bar" data-w="${(d.ps/d.max*100).toFixed(1)}" style="width:0%">
+            <span class="bar-dot"></span>
+            <span class="bar-val">${d.psLabel}</span>
+          </div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill hx-bar" data-w="${(d.hx/d.max*100).toFixed(1)}" style="width:0%">
+            <span class="bar-dot"></span>
+            <span class="bar-val">${d.hxLabel}</span>
+          </div>
+        </div>
+      </div>`;
+    container.appendChild(row);
+  });
+}
+buildBars();
+
+/* ════════════════════════════════════
+   RADAR CHART
+════════════════════════════════════ */
+function drawRadar(){
+  const canvas = document.getElementById('radarCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2, R = Math.min(W,H)*0.38;
+
+  const labels = ['GPU','SSD','Valeur Prix','Rétrocompat.','Écosystème','VR','Manette','Catalogue'];
+  const psVals = [0.86, 1.0, 0.6, 0.55, 0.65, 1.0, 1.0, 0.7];
+  const hxVals = [1.0, 0.9, 0.9, 1.0, 1.0, 0.2, 0.75, 1.0];
+
+  const n = labels.length;
+  const step = (Math.PI * 2) / n;
+  const start = -Math.PI / 2;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Grid rings
+  for(let ring = 1; ring <= 5; ring++){
+    const r = R * ring / 5;
+    ctx.beginPath();
+    for(let i = 0; i < n; i++){
+      const a = start + i * step;
+      i === 0 ? ctx.moveTo(cx + r*Math.cos(a), cy + r*Math.sin(a))
+              : ctx.lineTo(cx + r*Math.cos(a), cy + r*Math.sin(a));
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Spokes
+  for(let i = 0; i < n; i++){
+    const a = start + i * step;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a));
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Draw shape fn
+  function drawShape(vals, color, glow){
+    ctx.beginPath();
+    for(let i = 0; i < n; i++){
+      const a = start + i * step;
+      const r = R * vals[i];
+      i === 0 ? ctx.moveTo(cx + r*Math.cos(a), cy + r*Math.sin(a))
+              : ctx.lineTo(cx + r*Math.cos(a), cy + r*Math.sin(a));
+    }
+    ctx.closePath();
+    ctx.fillStyle = color.replace('1)', '0.15)');
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.shadowColor = glow;
+    ctx.shadowBlur = 16;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Dots
+    for(let i = 0; i < n; i++){
+      const a = start + i * step;
+      const r = R * vals[i];
+      ctx.beginPath();
+      ctx.arc(cx + r*Math.cos(a), cy + r*Math.sin(a), 4, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.shadowColor = glow;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  drawShape(psVals, 'rgba(91,170,255,1)',  '#0070d1');
+  drawShape(hxVals, 'rgba(199,125,255,1)', '#8b2be2');
+
+  // Labels
+  ctx.font = '600 13px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i < n; i++){
+    const a = start + i * step;
+    const lx = cx + (R + 36) * Math.cos(a);
+    const ly = cy + (R + 36) * Math.sin(a);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText(labels[i], lx, ly);
+  }
+}
+drawRadar();
+
+/* ════════════════════════════════════
+   CRITERIA GRID
+════════════════════════════════════ */
+const criteria = [
+  { name: 'Puissance GPU',     ps: '~24 TFLOPS',          hx: '~28 TFLOPS',              win: 'hx' },
+  { name: 'Vitesse SSD',       ps: '~22 Go/s',            hx: '~20 Go/s',                win: 'ps' },
+  { name: 'Prix de lancement', ps: '~599 €',              hx: '~549 €',                  win: 'hx' },
+  { name: 'Exclusivités',      ps: 'God of War, Spider-Man…', hx: 'Halo, Fable…',        win: 'draw' },
+  { name: 'Abonnement',        ps: 'PlayStation Plus',    hx: 'Game Pass Ultimate',       win: 'hx' },
+  { name: 'Catalogue day-one', ps: 'Quelques centaines',  hx: '+500 jeux inclus',         win: 'hx' },
+  { name: 'Écosystème PC',     ps: 'Remote Play',         hx: 'Xbox / Windows natif',    win: 'hx' },
+  { name: 'Manette',           ps: 'DualSense 2 haptique',hx: 'Xbox Elite v3',            win: 'ps' },
+  { name: 'Interface',         ps: 'PlayStation OS 2.0',  hx: 'Xbox Dashboard NG',        win: 'draw' },
+  { name: 'Rétrocompat.',      ps: 'PS4, PS5',            hx: 'Xbox One, Series, PC',    win: 'hx' },
+  { name: 'VR natif',          ps: 'PS VR3 compatible',   hx: 'Non confirmé',             win: 'ps' },
+  { name: 'Conso. énergie',    ps: '~200 W',              hx: '~220 W',                  win: 'ps' },
+  { name: 'IA embarquée',      ps: 'PSSR + Tempest 2',    hx: 'DirectML + AI Copilot',   win: 'draw' },
+];
+
+function buildCriteria(){
+  const grid = document.getElementById('criteriaGrid');
+  const labels = { ps: '🎮 PS6', hx: '⚡ Helix', draw: '🤝 Égalité' };
+  criteria.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = `crit-card win-${c.win}`;
+    card.style.animationDelay = `${i * 0.05}s`;
+    card.innerHTML = `
+      <div class="crit-top">
+        <div class="crit-name">${c.name}</div>
+        <div class="crit-badge ${c.win}">${labels[c.win]}</div>
+      </div>
+      <div class="crit-compare">
+        <div class="crit-item ps-item">
+          <span class="ci-label">PS6</span>
+          <span class="ci-val">${c.ps}</span>
+        </div>
+        <div class="crit-item hx-item">
+          <span class="ci-label">Helix</span>
+          <span class="ci-val">${c.hx}</span>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+buildCriteria();
+
+/* ════════════════════════════════════
+   TABS
+════════════════════════════════════ */
+function setTab(which){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-ps','active-hx'));
+  document.getElementById('tab-'+which).classList.add('active');
+  const btn = document.querySelector(`.tab-btn[onclick="setTab('${which}')"]`);
+  btn.classList.add(which === 'ps' ? 'active-ps' : 'active-hx');
+}
+
+/* ════════════════════════════════════
+   INTERSECTION OBSERVER
+════════════════════════════════════ */
+let barsAnimated = false, countersAnimated = false, scoresAnimated = false;
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+
+    // Bars
+    if(!barsAnimated && entry.target.contains(document.getElementById('barChart'))){
+      barsAnimated = true;
+      setTimeout(() => {
+        document.querySelectorAll('.bar-fill').forEach(b => {
+          b.style.width = b.dataset.w + '%';
+        });
+      }, 200);
+    }
+
+    // Counters
+    if(!countersAnimated){
+      const nums = entry.target.querySelectorAll('[data-target]');
+      if(nums.length){
+        countersAnimated = true;
+        nums.forEach(el => {
+          const target = parseFloat(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1200;
+          const start = performance.now();
+          function tick(now){
+            const t = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1-t, 3);
+            const val = Math.round(target * ease);
+            el.textContent = val + suffix;
+            if(t < 1) requestAnimationFrame(tick);
+            else el.textContent = target + suffix;
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+    }
+
+    // Duel scores
+    if(!scoresAnimated && (entry.target.querySelector('#psScore') || entry.target.id === 'psScore')){
+      scoresAnimated = true;
+      const psWins = criteria.filter(c => c.win === 'ps').length;
+      const hxWins = criteria.filter(c => c.win === 'hx').length;
+      const total  = psWins + hxWins;
+
+      animCount(document.getElementById('psScore'), psWins, 1000);
+      animCount(document.getElementById('hxScore'), hxWins, 1000);
+
+      setTimeout(() => {
+        document.getElementById('duelBarPs').style.width = (psWins/total*100) + '%';
+        document.getElementById('duelBarHx').style.width = (hxWins/total*100) + '%';
+      }, 300);
+    }
+  });
+}, { threshold: 0.15 });
+
+function animCount(el, target, dur){
+  const start = performance.now();
+  (function tick(now){
+    const t = Math.min((now - start) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1-t,3)));
+    if(t < 1) requestAnimationFrame(tick);
+    else el.textContent = target;
+  })(performance.now());
+}
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// Also observe duel section directly for score animation
+const duelWrap = document.querySelector('.duel-wrap');
+if(duelWrap) observer.observe(duelWrap);
+</script>
 </body>
 </html>
